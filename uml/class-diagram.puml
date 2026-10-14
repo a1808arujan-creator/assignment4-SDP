@@ -1,0 +1,72 @@
+@startuml
+
+class Main
+
+class RegistrationWorkflowFacade
+class RegistrationAdminFacade
+
+package "Subsystem A - Eligibility" {
+    class EligibilityRecord
+    enum EligibilityStatus
+    class PrerequisiteChecker
+    class FinancialHoldChecker
+    class EligibilityRepository
+}
+
+package "Subsystem B - Seat Management" {
+    class SeatReservation
+    enum SeatStatus
+    class SeatAllocator
+    class WaitlistManager
+    class SeatRepository
+}
+
+package "Subsystem C - Finalization" {
+    class RegistrationRecord
+    enum RegistrationStatus
+    class BillingSystem
+    class TranscriptService
+    class RegistrationRepository
+}
+
+package "Workflow" {
+    class WorkflowRecord
+    enum WorkflowStatus
+    class WorkflowRepository
+}
+
+Main --> RegistrationWorkflowFacade
+Main --> RegistrationAdminFacade
+
+RegistrationWorkflowFacade --> PrerequisiteChecker
+RegistrationWorkflowFacade --> FinancialHoldChecker
+RegistrationWorkflowFacade --> EligibilityRepository
+
+RegistrationWorkflowFacade --> SeatAllocator
+RegistrationWorkflowFacade --> WaitlistManager
+RegistrationWorkflowFacade --> SeatRepository
+
+RegistrationWorkflowFacade --> BillingSystem
+RegistrationWorkflowFacade --> TranscriptService
+RegistrationWorkflowFacade --> RegistrationRepository
+
+RegistrationWorkflowFacade --> WorkflowRepository
+
+RegistrationAdminFacade --> EligibilityRepository
+RegistrationAdminFacade --> SeatRepository
+RegistrationAdminFacade --> RegistrationRepository
+RegistrationAdminFacade --> WorkflowRepository
+
+EligibilityRecord --> EligibilityStatus
+EligibilityRepository --> EligibilityRecord
+
+SeatReservation --> SeatStatus
+SeatRepository --> SeatReservation
+
+RegistrationRecord --> RegistrationStatus
+RegistrationRepository --> RegistrationRecord
+
+WorkflowRecord --> WorkflowStatus
+WorkflowRepository --> WorkflowRecord
+
+@enduml
