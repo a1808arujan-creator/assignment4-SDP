@@ -1,5 +1,9 @@
 package kz.aitu.registration.strategy.section;
 
-public class SectionSelectionStrategy {
-    
+public interface SectionSelectionStrategy {
+    String selectSection(
+        int availableSeats,
+        int currentDemand,
+        String preferredTime
+    );
 }

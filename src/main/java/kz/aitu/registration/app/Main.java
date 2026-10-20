@@ -8,7 +8,9 @@ import kz.aitu.registration.seat.SeatReservation;
 import kz.aitu.registration.seat.SeatRepository;
 import kz.aitu.registration.workflow.WorkflowRecord;
 import kz.aitu.registration.workflow.WorkflowRepository;
-
+import kz.aitu.registration.strategy.priority.*;
+import kz.aitu.registration.strategy.section.*;
+import kz.aitu.registration.strategy.section.data.SimulatedDemandDataSource;
 import java.util.Scanner;
 
 public class Main {
@@ -37,6 +39,8 @@ public class Main {
             System.out.println("5. Resume persisted workflow");
             System.out.println("6. Manual compensation");
             System.out.println("7. Prepare workflow for restart demo");
+            System.out.println("8. Strategy demo: priority");
+        System.out.println("9. Strategy demo: section");
             System.out.println("0. Exit");
 
             System.out.print("Choose: ");
@@ -97,6 +101,10 @@ public class Main {
 
                     case "7" ->
                             prepareRestartDemo();
+
+                case "8" -> priorityStrategyDemo();
+
+                case "9" -> sectionStrategyDemo();
 
                     case "0" -> {
 
@@ -279,4 +287,211 @@ public class Main {
                 "Use workflow ID: " + workflowId
         );
     }
+
+
+    private static void priorityStrategyDemo() {
+
+    int studyYear = 4;
+    double gpa = 3.8;
+    int waitingMinutes = 30;
+
+    System.out.println();
+    System.out.println("=== PRIORITY STRATEGY DEMO ===");
+
+    // Same input through all strategies
+    RegistrationPriorityStrategy firstCome =
+            new FirstComePriorityStrategy();
+
+    RegistrationPriorityStrategy senior =
+            new SeniorStudentPriorityStrategy();
+
+    RegistrationPriorityStrategy merit =
+            new AcademicMeritPriorityStrategy();
+
+    System.out.println(
+            "First Come: "
+                    + firstCome.calculatePriority(
+                            studyYear,
+                            gpa,
+                            waitingMinutes
+                    )
+    );
+
+    System.out.println(
+            "Senior: "
+                    + senior.calculatePriority(
+                            studyYear,
+                            gpa,
+                            waitingMinutes
+                    )
+    );
+
+    System.out.println(
+            "Academic Merit: "
+                    + merit.calculatePriority(
+                            studyYear,
+                            gpa,
+                            waitingMinutes
+                    )
+    );
+
+    // Manual choice
+    PriorityContext context =
+            new PriorityContext(firstCome);
+
+    System.out.println();
+    System.out.println(
+            "Manual strategy result: "
+                    + context.calculatePriority(
+                            studyYear,
+                            gpa,
+                            waitingMinutes
+                    )
+    );
+
+    // Runtime switching
+    context.setStrategy(merit);
+
+    System.out.println(
+            "After runtime switch: "
+                    + context.calculatePriority(
+                            studyYear,
+                            gpa,
+                            waitingMinutes
+                    )
+    );
+
+    // Automatic selection
+    PriorityStrategySelector selector =
+            new PriorityStrategySelector();
+
+    RegistrationPriorityStrategy selected =
+            selector.selectStrategy(
+                    studyYear,
+                    gpa,
+                    waitingMinutes
+            );
+
+    context.setStrategy(selected);
+
+    System.out.println(
+            "Automatically selected strategy: "
+                    + selected.getClass().getSimpleName()
+    );
+
+    System.out.println(
+            "Automatic result: "
+                    + context.calculatePriority(
+                            studyYear,
+                            gpa,
+                            waitingMinutes
+                    )
+    );
+}
+
+private static void sectionStrategyDemo() {
+
+    int availableSeats = 15;
+    int currentDemand = 50;
+    String preferredTime = "MORNING";
+
+    System.out.println();
+    System.out.println("=== SECTION STRATEGY DEMO ===");
+
+    SimulatedDemandDataSource dataSource =
+            new SimulatedDemandDataSource();
+
+    SectionSelectionStrategy firstAvailable =
+            new FirstAvailableSectionStrategy();
+
+    SectionSelectionStrategy mostAvailable =
+            new MostAvailableSeatsStrategy();
+
+    SectionSelectionStrategy demandAware =
+            new DemandAwareSectionStrategy(
+                    dataSource
+            );
+
+    // Same input through all strategies
+    System.out.println(
+            "First Available: "
+                    + firstAvailable.selectSection(
+                            availableSeats,
+                            currentDemand,
+                            preferredTime
+                    )
+    );
+
+    System.out.println(
+            "Most Available Seats: "
+                    + mostAvailable.selectSection(
+                            availableSeats,
+                            currentDemand,
+                            preferredTime
+                    )
+    );
+
+    System.out.println(
+            "Demand Aware: "
+                    + demandAware.selectSection(
+                            availableSeats,
+                            currentDemand,
+                            preferredTime
+                    )
+    );
+
+    // Manual choice
+    SectionContext context =
+            new SectionContext(firstAvailable);
+
+    System.out.println();
+    System.out.println(
+            "Manual strategy result: "
+                    + context.selectSection(
+                            availableSeats,
+                            currentDemand,
+                            preferredTime
+                    )
+    );
+
+    // Runtime switching
+    context.setStrategy(demandAware);
+
+    System.out.println(
+            "After runtime switch: "
+                    + context.selectSection(
+                            availableSeats,
+                            currentDemand,
+                            preferredTime
+                    )
+    );
+
+    // Automatic selection
+    SectionStrategySelector selector =
+            new SectionStrategySelector(
+                    dataSource
+            );
+
+    SectionSelectionStrategy selected =
+            selector.selectStrategy(
+                    availableSeats,
+                    preferredTime
+            );
+
+    context.setStrategy(selected);
+
+    System.out.println(
+            "Automatically selected strategy: "
+                    + selected.getClass().getSimpleName()
+    );
+
+    System.out.println(
+            "Automatic result: "
+                    + context.selectSection(
+                            availableSeats,
+                            currentDemand,
+                            preferredTime
+                    )
+    );
+}
 }

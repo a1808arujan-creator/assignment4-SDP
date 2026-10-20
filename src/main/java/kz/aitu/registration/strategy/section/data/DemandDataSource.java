@@ -1,5 +1,6 @@
 package kz.aitu.registration.strategy.section.data;
 
-public class DemandDataSource {
-    
+public interface DemandDataSource {
+
+    int getCurrentDemand();
 }
