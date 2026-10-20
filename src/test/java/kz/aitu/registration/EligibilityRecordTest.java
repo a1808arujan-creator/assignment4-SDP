@@ -78,4 +78,20 @@ class EligibilityRecordTest {
                 record::compensate
         );
     }
+    @Test
+    void newEligibilityCannotBeApproved() {
+
+        EligibilityRecord record =
+                new EligibilityRecord(
+                        "wf-invalid-approve",
+                        "ST004",
+                        "SDP2301"
+                );
+
+        assertThrows(
+                IllegalStateException.class,
+                record::approve
+        );
+    }
 }
+

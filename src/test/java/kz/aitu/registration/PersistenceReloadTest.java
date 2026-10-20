@@ -28,13 +28,6 @@ public class PersistenceReloadTest
         String workflowId =
                 "restart-pending-c";
 
-        /*
-         * ==========================
-         * BEFORE RESTART
-         * ==========================
-         *
-         * Simulate A already committed.
-         */
 
         EligibilityRecord eligibility =
                 new EligibilityRecord(
@@ -102,17 +95,7 @@ public class PersistenceReloadTest
                         .getStatus()
         );
 
-        /*
-         * ==========================
-         * SIMULATED RESTART
-         * ==========================
-         *
-         * We throw away the old objects
-         * and construct a completely new facade.
-         *
-         * The new facade must discover PENDING_C
-         * from JSON on disk.
-         */
+        
 
         RegistrationWorkflowFacade facadeAfterRestart =
                 new RegistrationWorkflowFacade();
@@ -124,11 +107,7 @@ public class PersistenceReloadTest
                 true
         );
 
-        /*
-         * ==========================
-         * AFTER RESTART
-         * ==========================
-         */
+        
 
         WorkflowRepository workflowRepositoryAfterRestart =
                 new WorkflowRepository();
@@ -157,10 +136,7 @@ public class PersistenceReloadTest
 
         registerSuccessfully(workflowId);
 
-        /*
-         * New repository object simulates
-         * reading the state after restart.
-         */
+        
 
         WorkflowRepository repositoryAfterRestart =
                 new WorkflowRepository();

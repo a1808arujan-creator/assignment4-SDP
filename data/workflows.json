@@ -3,4 +3,34 @@
   "studentId" : "ST001",
   "courseCode" : "SDP2301",
   "status" : "PENDING_B"
+}, {
+  "workflowId" : "b-failure-1792143505098",
+  "studentId" : "student-002",
+  "courseCode" : "SDP2301",
+  "status" : "COMPENSATED"
+}, {
+  "workflowId" : "b-failure-1792147292979",
+  "studentId" : "student-002",
+  "courseCode" : "SDP2301",
+  "status" : "COMPENSATED"
+}, {
+  "workflowId" : "b-failure-1792147326252",
+  "studentId" : "student-002",
+  "courseCode" : "SDP2301",
+  "status" : "COMPENSATED"
+}, {
+  "workflowId" : "b-failure-1792147330725",
+  "studentId" : "student-002",
+  "courseCode" : "SDP2301",
+  "status" : "COMPENSATED"
+}, {
+  "workflowId" : "b-failure-1792147336783",
+  "studentId" : "student-002",
+  "courseCode" : "SDP2301",
+  "status" : "COMPENSATED"
+}, {
+  "workflowId" : "restart-demo",
+  "studentId" : "student-restart",
+  "courseCode" : "SDP2301",
+  "status" : "PENDING_C"
 } ]

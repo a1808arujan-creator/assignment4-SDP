@@ -49,6 +49,8 @@ public class EligibilityRecord {
         status = EligibilityStatus.COMPENSATED;
     }
 
+
+
     public String getWorkflowId() {
         return workflowId;
     }

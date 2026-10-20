@@ -97,11 +97,6 @@ public class RegistrationWorkflowFacade {
         );
     }
 
-    /*
-     * Used after application restart.
-     * Reads the REAL persisted workflow status
-     * and continues from the correct stage.
-     */
     public void resumeWorkflow(
             String workflowId,
             int availableSeats,
@@ -415,5 +410,6 @@ public class RegistrationWorkflowFacade {
                     "Course code cannot be empty"
             );
         }
+        
     }
 }
